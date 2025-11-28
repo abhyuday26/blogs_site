@@ -1,6 +1,6 @@
 # Django Blog Platform
 
-A fully functional Blog/Article platform built with Django.
+A fully functional Blog/Article platform built with Django and Bootstrap.
 
 ## Features
 
