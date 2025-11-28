@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<article>
+    <h1 class="mb-3">{{ post.title }}</h1>
+    <div class="text-muted mb-3">
+        Posted on {{ post.created_at|date:"F d, Y" }} by {{ post.author }}
+        {% if post.category %}
+        in <a href="{% url 'category_list' post.category.slug %}">{{ post.category.name }}</a>
+        {% endif %}
+    </div>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="img-fluid rounded mb-4" alt="{{ post.title }}">
+    {% endif %}
+    <div class="mb-5">
+        {{ post.content|linebreaks }}
+    </div>
+</article>
+
+<hr>
+
+<div class="mb-5">
+    <h3>Comments ({{ comments.count }})</h3>
+    {% for comment in comments %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ comment.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ comment.created_at|date:"F d, Y H:i" }}</h6>
+            <p class="card-text">{{ comment.body|linebreaks }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>No comments yet.</p>
+    {% endfor %}
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Leave a Comment</div>
+    <div class="card-body">
+        {% if new_comment %}
+        <div class="alert alert-success" role="alert">
+            Your comment is awaiting moderation.
+        </div>
+        {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
